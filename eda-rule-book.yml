@@ -1,5 +1,5 @@
 ---
-- name: OpenShift Demo
+- name: OpenShift Auto Recovery
 
   hosts: all
 
@@ -10,11 +10,11 @@
 
   rules:
 
-    - name: Pod Failure
+    - name: Application Down
 
-      condition: event.reason == "PodDeleted"
+      condition: event.reason == "ApplicationDown"
 
       action:
         run_job_template:
-          name: Restart-Nginx
+          name: Scale-Nginx
           organization: Default
