@@ -1,20 +1,13 @@
 ---
-- name: OpenShift Demo
-
+- name: OpenShift Auto Recovery
   hosts: all
-
   sources:
-    - ansible.eda.webhook:
-        host: 0.0.0.0
-        port: 5000
-
+    - ansible.eda.pg_listener:
+        pg_port: 5432        # Event Stream uses this internally — not webhook
   rules:
-
-    - name: Pod Failure
-
-      condition: event.reason == "PodDeleted"
-
+    - name: Application Down
+      condition: event.payload.reason == "ApplicationDown"
       action:
         run_job_template:
-          name: Restart-Nginx
+          name: eda-test
           organization: Default
