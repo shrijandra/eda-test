@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Restart deployment
+      kubernetes.core.k8s:
+        api_version: apps/v1
+        kind: Deployment
+        namespace: demo
+        name: nginx
+        state: patched
+        definition:
+          spec:
+            template:
+              metadata:
+                annotations:
+                  restartedAt: "{{ ansible_date_time.iso8601 }}"
