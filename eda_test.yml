@@ -1,18 +1,14 @@
 ---
-- hosts: localhost
+- name: Scale Nginx Deployment
+  hosts: localhost
   gather_facts: false
 
   tasks:
-    - name: Restart deployment
-      kubernetes.core.k8s:
+
+    - name: Scale deployment to 1 replica
+      kubernetes.core.k8s_scale:
         api_version: apps/v1
         kind: Deployment
-        namespace: demo
         name: nginx
-        state: patched
-        definition:
-          spec:
-            template:
-              metadata:
-                annotations:
-                  restartedAt: "{{ ansible_date_time.iso8601 }}"
+        namespace: demo
+        replicas: 1
