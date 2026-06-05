@@ -1,12 +1,11 @@
----
 - name: OpenShift Auto Recovery
   hosts: all
   sources:
     - eda.builtin.pg_listener:
-        pg_port: 5432        # Event Stream uses this internally — not webhook
+        pg_port: 5432
   rules:
     - name: Application Down
-      condition: event.payload.reason == "ApplicationDown"
+      condition: event.payload.body == '{"reason":"ApplicationDown"}'
       action:
         run_job_template:
           name: eda-test
