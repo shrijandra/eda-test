@@ -1,0 +1,24 @@
+- name: Verify variable exists
+  debug:
+    msg: "{{ lookup('env','OPENAI_API_KEY')[:10] }}..."
+
+- name: Analyze OpenShift logs with OpenAI
+  uri:
+    url: https://api.openai.com/v1/responses
+    method: POST
+    headers:
+      Authorization: "Bearer {{ lookup('env','OPENAI_API_KEY') }}"
+      Content-Type: "application/json"
+    body_format: json
+    body:
+      model: gpt-5
+      input: |
+        Analyze the following container logs.
+        Identify:
+        1. Root cause
+        2. Severity
+        3. Suggested remediation
+
+        Logs:
+        {{ pod_logs }}
+  register: ai_analysis
