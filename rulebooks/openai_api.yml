@@ -1,4 +1,5 @@
 - name: Verify variable exists
+  hosts: all
   debug:
     msg: "{{ lookup('env','OPENAI_API_KEY')[:10] }}..."
 
