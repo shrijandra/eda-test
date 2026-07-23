@@ -79,7 +79,7 @@ Check current configuration:
 oc get alertmanager main -n openshift-monitoring -o yaml | Select-String "alertmanagerconfig"
 ```
 
-Patch Alertmanager:
+Patch Alertmanager: Note: In my local OpenShift CRC lab, I need to manually patch the Alertmanager resource so it discovers AlertmanagerConfig objects created outside the openshift-monitoring namespace. By default, Alertmanager only selects configurations that match its configured selectors, so my AlertmanagerConfig in the demo namespace is ignored and no alerts are forwarded to Ansible Automation Platform. This patch temporarily updates the selectors to discover configurations from all namespaces, allowing the webhook to AAP Event-Driven Ansible to work. Since this is a CRC lab environment, the patch may need to be reapplied after a cluster restart because the Alertmanager operator reconciles the resource.
 
 ```bash
 oc -n openshift-monitoring patch alertmanager main --type merge -p '{"spec":{"alertmanagerConfigSelector":{"matchLabels":{}},"alertmanagerConfigNamespaceSelector":{"matchLabels":{}}}}'
