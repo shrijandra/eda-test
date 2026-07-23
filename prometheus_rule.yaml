@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: nginx-alerts
+  namespace: demo
+spec:
+  groups:
+  - name: deployment.rules
+    rules:
+    - alert: DeploymentDown
+      expr: kube_deployment_status_replicas_available{deployment="nginx"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Deployment nginx is down"
+        description: "No available replicas for deployment nginx for more than 1 minute"
