@@ -153,7 +153,24 @@ oc adm policy add-scc-to-user anyuid -z nginx-sa
 
 ---
 
-## 10. Trigger an Alert
+## 10. Start a Tunnel
+
+```bash
+ngrok http https://api.crc.testing:6443
+```
+
+---
+
+## 11. Create a token
+create token for nginx-sa: 
+Get the API end point from the ngrok and use that endpoint to configure credential in AAP with below generated token. This credential will be used by AAP to execute the job template in CRC OpenShift cluster.
+
+```bash
+oc create token nginx-sa -n demo –duration=2h
+```
+
+---
+## 12. Trigger an Alert
 Scale the deployment to zero replicas to trigger the alert.
 
 ```bash
@@ -162,7 +179,7 @@ oc scale deployment nginx --replicas=0 -n demo
 
 ---
 
-## 11. View Alertmanager Alerts
+## 13. View Alertmanager Alerts
 Port-forward Alertmanager and open the web UI.
 
 ```bash
