@@ -1,3 +1,19 @@
+# OpenShift Self-Healing Automation | Prometheus + Alertmanager + AAP Event-Driven Ansible
+
+<img width="1536" height="1024" alt="OpenShift Self-Healing Remediation Using AAP Architechture" src="https://github.com/user-attachments/assets/dd452142-b178-48a9-a3ca-422a86350263" />
+
+"This diagram illustrates the complete self-healing workflow built using OpenShift CRC, Prometheus, Alertmanager, Event-Driven Ansible, and Ansible Automation Platform.
+
+The process begins when an administrator intentionally scales the NGINX deployment to zero replicas, simulating an application failure. Prometheus continuously monitors the cluster and evaluates a custom PrometheusRule. When it detects that the deployment has no available replicas for more than one minute, it generates a DeploymentDown alert.
+
+Alertmanager then forwards this alert directly to the AAP External Event Stream over HTTPS using the public route of the AAP Developer Sandbox. No ngrok tunnel is required for alert delivery.
+
+Event-Driven Ansible receives the event, evaluates the rulebook synchronized from GitHub, and if the alert matches the configured condition, it triggers an Automation Controller Job Template.
+
+The Job Template executes an Ansible playbook that connects to my local OpenShift CRC cluster through a secure ngrok tunnel, because the Kubernetes API is running locally. The playbook automatically scales the deployment back to the desired number of replicas, restoring the application without any manual intervention.
+
+Finally, Prometheus detects that the application is healthy again, the alert is resolved, and the self-healing process is complete."
+
 # OpenShift CRC Monitoring & Alerting Setup
 
 ## 1. Enable Built-in OpenShift Monitoring
